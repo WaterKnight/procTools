@@ -1,0 +1,17 @@
+ID;PWXL;N;E
+B;X14;Y1;D0
+C;X1;Y1;K"Name"
+C;X2;K"comment"
+C;X3;K"Dir"
+C;X4;K"file"
+C;X5;K"AvgSegLen"
+C;X6;K"Width"
+C;X7;K"R"
+C;X8;K"G"
+C;X9;K"B"
+C;X10;K"A"
+C;X11;K"NoiseScale"
+C;X12;K"TexCoordScale"
+C;X13;K"Duration"
+C;X14;K"version"
+E

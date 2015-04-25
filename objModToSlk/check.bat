@@ -1,0 +1,3 @@
+lua objModToSlk.lua
+
+pause
