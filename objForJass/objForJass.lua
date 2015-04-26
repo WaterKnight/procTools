@@ -189,17 +189,20 @@ out:createGlobal('hashtable OBJ_TABLE = InitHashtable()')
 out:createGlobal('hashtable OBJ_BASE_TABLE = InitHashtable()')
 out:createGlobal('hashtable OBJ_LEVEL_TABLE = InitHashtable()')
 
-local initFunc = out:createFunc('objForJass_init_autoRun')
+local topInitFunc = out:createFunc('objForJass_init_autoRun')
 local c = 0
 
-local function addLine(s)
-	c = c + 1
+local curInitFunc
 
+local function addLine(s)
 	if ((c % 10000) == 0) then
-		initFunc = out:createFunc(string.format('objForJass_init%i_autoRun', c / 10000))
+		curInitFunc = out:createFunc(string.format('objForJass_init%i', c / 10000))
+
+		topInitFunc:addLine([[call ExecuteFunc(]]..curInitFunc.name:quote()..[[)]])
 	end
 
-	initFunc:addLine(s)
+	c = c + 1
+	curInitFunc:addLine(s)
 end
 
 for field, val in pairs(fieldValOccuredMax) do
@@ -273,7 +276,7 @@ for objId, objData in pairs(objs) do
 end
 
 local function createReadFuncs(funcSuffix, returnType, containsFuncSuffix, loadFuncSuffix)
-	local readFunc = out:createFunc('objData_read'..funcSuffix)
+	local readFunc = out:createFunc('objForJass_read'..funcSuffix)
 
 	readFunc:addParam('objId', 'integer')
 	readFunc:addParam('field', 'integer')
@@ -284,14 +287,14 @@ local function createReadFuncs(funcSuffix, returnType, containsFuncSuffix, loadF
 			//return Load]]..loadFuncSuffix..[[(OBJ_TABLE, 0, field)
 
 			if HaveSavedInteger(OBJ_BASE_TABLE, objId, 0) then
-				return objData_read]]..funcSuffix..[[(LoadInteger(OBJ_BASE_TABLE, objId, 0), field)
+				return objForJass_read]]..funcSuffix..[[(LoadInteger(OBJ_BASE_TABLE, objId, 0), field)
 			endif
 		endif
 
 		return Load]]..loadFuncSuffix..[[(OBJ_TABLE, objId, field)
 	]])
 
-	local readLvFunc = out:createFunc('objData_readLv'..funcSuffix)
+	local readLvFunc = out:createFunc(string.format('objForJass_read%sLv', funcSuffix))
 
 	readLvFunc:addParam('objId', 'integer')
 	readLvFunc:addParam('field', 'integer')
@@ -305,7 +308,7 @@ local function createReadFuncs(funcSuffix, returnType, containsFuncSuffix, loadF
 			//return Load]]..loadFuncSuffix..[[(OBJ_TABLE, 0, field)
 
 			if HaveSavedInteger(OBJ_BASE_TABLE, objId, 0) then
-				return objData_readLv]]..funcSuffix..[[(LoadInteger(OBJ_BASE_TABLE, objId, 0), field, lv)
+				return objForJass_read]]..funcSuffix..[[Lv(LoadInteger(OBJ_BASE_TABLE, objId, 0), field, lv)
 			endif
 
 		endif
@@ -314,8 +317,8 @@ local function createReadFuncs(funcSuffix, returnType, containsFuncSuffix, loadF
 	]])
 end
 
-createReadFuncs('Boolean', 'boolean', 'Boolean', 'Boolean')
-createReadFuncs('Integer', 'integer', 'Integer', 'Integer')
+createReadFuncs('Bool', 'boolean', 'Boolean', 'Boolean')
+createReadFuncs('Int', 'integer', 'Integer', 'Integer')
 createReadFuncs('Real', 'real', 'Real', 'Real')
 createReadFuncs('String', 'string', 'String', 'Str')
 
@@ -327,8 +330,8 @@ local j = createJass()
 
 j:readFromPath(io.local_dir()..'war3map.j')
 
-j:merge(out)
+out:merge(j)
 
-j:writeToPath(io.local_dir()..'war3map.j')
+out:writeToPath(io.local_dir()..'war3map.j')
 
 mpqImport(mapPath, io.local_dir()..'war3map.j', 'war3map.j')
