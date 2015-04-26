@@ -8,8 +8,6 @@ local wc3path = params[2]
 assert(mapPath, 'no mapPath')
 assert(wc3path, 'no wc3path')
 
-print('objForJassA')
-
 wc3path = io.toFolderPath(wc3path)
 
 osLib.clearScreen()
@@ -19,8 +17,6 @@ require 'wc3objMerge'
 local objCon = objLib.createInstance()
 
 objCon:readFromMap(mapPath, true, wc3path)
-
-print('objForJassEnd')
 
 local function fieldMatchVal(field, val)
 	local fieldType = objCon.metaData.objs[field].vals['type']
@@ -230,9 +226,6 @@ local levelIndex = 0
 
 for objId, objData in pairs(objs) do
 	if (objData.baseId ~= nil) then
-print('baseIdConB', objId, objData.baseId)
-io.flush(stdout)
-osLib.pause()
 		addLine(string.format([[call SaveInteger(OBJ_BASE_TABLE, '%s', 0, '%s')]], objId, objData.baseId))
 	end
 
