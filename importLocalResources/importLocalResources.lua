@@ -48,10 +48,14 @@ local j = createJass()
 j:readFromPath('war3map.j')
 
 local function searchJassLine(line)
+	line = line:gsub([[\\]], string.char(1))
+	line = line:gsub([[\"]], string.char(2))
+
 	local lits = line:gmatch([[%"(.-)%"]])
 
 	for lit in lits do
-		lit = lit:gsub([[\\]], [[\]])
+		lit = lit:gsub(string.char(1), [[\]])
+		lit = lit:gsub(string.char(2), [["]])
 
 		modelPaths[lit] = lit
 	end
@@ -92,6 +96,22 @@ for _, path in pairs(modelPaths) do
 
 	if io.pathExists(diskPath) then
 		print('import', diskPath, 'to', path)
+		require 'mdxLib'
+
+		local mdx = createMdx()
+
+		mdx:readFromPath(diskPath)
+
+		for _, tex in pairs(mdx.texs) do
+			if tex.hasPath then
+				local texDiskPath = io.toAbsPath(tex.path, io.toAbsPath(getFolder(path), lookupPath))
+				local texTargetPath = getFolder(path)..tex.path
+
+				print('\tadd skin:', texDiskPath, 'to', texTargetPath)
+				impPort:addImport(texDiskPath, texTargetPath)
+			end
+		end
+
 		impPort:addImport(diskPath, path)
 	else
 		print(path, 'not found')
