@@ -34,7 +34,7 @@ end
 
 require 'portLib'
 
-local extPort = createMpqPort()
+local extPort = portLib.createMpqPort()
 
 extPort:addExtract('war3map.wts', 'war3map.wts')
 extPort:addExtract('war3map.j', 'war3map.j')
@@ -89,7 +89,7 @@ for path in pairs(t) do
 	end
 end
 
-local impPort = createMpqPort()
+local impPort = portLib.createMpqPort()
 
 for _, path in pairs(modelPaths) do
 	local diskPath = io.toAbsPath(path, lookupPath)

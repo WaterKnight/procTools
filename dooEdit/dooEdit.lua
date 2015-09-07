@@ -18,7 +18,7 @@ createDir(inputDir)
 
 require 'portLib'
 
-mpqExtract(mapPath, [[war3map.doo]], inputDir)
+portLib.mpqExtract(mapPath, [[war3map.doo]], inputDir)
 
 require 'wc3doo'
 
@@ -38,4 +38,4 @@ createDir(outputDir)
 
 doo:writeToPath(outputDir..[[war3map.doo]])
 
-mpqImport(mapPath, outputDir..[[war3map.doo]], [[war3map.doo]])
+portLib.mpqImport(mapPath, outputDir..[[war3map.doo]], [[war3map.doo]])

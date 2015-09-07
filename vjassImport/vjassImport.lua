@@ -42,7 +42,7 @@ require 'portLib'
 flushDir(inputDir)
 createDir(inputDir)
 
-mpqExtract(map, [[war3map.j]], inputDir)
+portLib.mpqExtract(map, [[war3map.j]], inputDir)
 
 flushDir(outputDir)
 createDir(outputDir)
@@ -169,7 +169,7 @@ end
 fIn:close()
 fOut:close()
 
-local impPort = createMpqPort()
+local impPort = portLib.createMpqPort()
 
 impPort:addImport(outputDir..[[war3map.j]], [[war3map.j]])
 

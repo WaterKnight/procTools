@@ -10,4 +10,4 @@ assert(targetPath, 'no targetPath')
 
 require 'portLib'
 
-mpqExtract(mapPath, filePath, targetPath)
+portLib.mpqExtract(mapPath, filePath, targetPath)

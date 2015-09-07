@@ -22,14 +22,14 @@ local inputDir = io.local_dir()..[[Input\]]
 removeDir(inputDir)
 createDir(inputDir)
 
-mpqExtract(mapPath, 'war3map.j', inputDir..'war3map.j')
+portLib.mpqExtract(mapPath, 'war3map.j', inputDir..'war3map.j')
 
 require 'wc3jass'
 
 if (commonJPath == nil) then
 	commonJPath = inputDir..[[Scripts\common.j]]
 
-	mpqExtractLatest(mapPath, [[Scripts\common.j]], inputDir, wc3path)
+	portLib.mpqExtractLatest(mapPath, [[Scripts\common.j]], inputDir, wc3path)
 else
 	commonJPath = io.toAbsPath(commonJPath, io.curDir())
 
@@ -45,7 +45,7 @@ local blizzardJass = createJass()
 if (blizzardJPath == nil) then
 	blizzardJPath = inputDir..[[Scripts\blizzard.j]]
 
-	mpqExtractLatest(mapPath, [[Scripts\blizzard.j]], inputDir, wc3path)
+	portLib.mpqExtractLatest(mapPath, [[Scripts\blizzard.j]], inputDir, wc3path)
 else
 	blizzardJPath = io.toAbsPath(blizzardJPath, io.curDir())
 
@@ -1085,5 +1085,5 @@ createJass():writeToPath(outputDir..'blizzard.j')
 
 jassSyntaxCheck({commonJPath, outputDir..'war3map.j'}, true)
 
-mpqImport(mapPath, outputDir..'war3map.j', 'war3map.j')
-mpqImport(mapPath, outputDir..[[blizzard.j]], [[Scripts\blizzard.j]])
+portLib.mpqImport(mapPath, outputDir..'war3map.j', 'war3map.j')
+portLib.mpqImport(mapPath, outputDir..[[blizzard.j]], [[Scripts\blizzard.j]])

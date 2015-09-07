@@ -18,10 +18,10 @@ createDir(inputDir)
 
 require 'portLib'
 
-mpqExtract(mapPath, [[war3map.doo]], inputDir)
-mpqExtract(mapPath, [[war3mapUnits.doo]], inputDir)
-mpqExtract(mapPath, [[war3map.shd]], inputDir)
-mpqExtract(mapPath, [[war3map.w3e]], inputDir)
+portLib.mpqExtract(mapPath, [[war3map.doo]], inputDir)
+portLib.mpqExtract(mapPath, [[war3mapUnits.doo]], inputDir)
+portLib.mpqExtract(mapPath, [[war3map.shd]], inputDir)
+portLib.mpqExtract(mapPath, [[war3map.w3e]], inputDir)
 
 require 'wc3shd'
 
@@ -81,4 +81,4 @@ createDir(outputDir)
 
 shd:writeToPath(outputDir..[[war3map.shd]])
 
-mpqImport(mapPath, outputDir..[[war3map.shd]], [[war3map.shd]])
+portLib.mpqImport(mapPath, outputDir..[[war3map.shd]], [[war3map.shd]])

@@ -24,8 +24,8 @@ require 'portLib'
 flushDir(inputDir)
 createDir(inputDir)
 
-mpqExtract(map, [[war3map.w3i]], inputDir)
-mpqExtract(map, [[war3map.wts]], inputDir)
+portLib.mpqExtract(map, [[war3map.w3i]], inputDir)
+portLib.mpqExtract(map, [[war3map.wts]], inputDir)
 
 flushDir(outputDir)
 createDir(outputDir)
@@ -64,7 +64,7 @@ root:writeToFile(outputDir..[[war3map.w3i]], infoFileMaskFunc)
 
 --info:writeToFile(outputDir..[[war3map.w3i]])
 
-local impPort = createMpqPort()
+local impPort = portLib.createMpqPort()
 
 impPort:addImport(outputDir..[[war3map.w3i]], [[war3map.w3i]])
 impPort:addImport(outputDir..[[war3map.wts]], [[war3map.wts]])

@@ -20,9 +20,9 @@ flushDir(inputDir)
 
 createDir(inputDir)
 
-mpqExtract(mapPath, [[war3map.wpm]], inputDir)
-mpqExtract(mapPath, [[war3map.w3r]], inputDir)
-mpqExtract(mapPath, [[war3map.w3e]], inputDir)
+portLib.mpqExtract(mapPath, [[war3map.wpm]], inputDir)
+portLib.mpqExtract(mapPath, [[war3map.w3r]], inputDir)
+portLib.mpqExtract(mapPath, [[war3map.w3e]], inputDir)
 
 local rectFile = io.open(inputDir..[[war3map.w3r]])
 
@@ -68,7 +68,7 @@ end
 
 require 'wc3wpm'
 
-local wpm = createWpm()
+local wpm = wc3wpm.create()
 
 wpm:readFromFile(inputDir..[[war3map.wpm]])
 
@@ -78,7 +78,7 @@ local maxY = wpm.height - 1
 local checked = {}
 
 local function fill(x, y)
-	if wpm:isFlag(x, y, pathingTypes.FLAG_WALK) then
+	if wpm:isFlag(x, y, wc3wpm.pathingTypes.FLAG_WALK) then
 		return
 	end
 
@@ -154,7 +154,7 @@ local t = osLib.createTimer()
 for y = 0, maxY, 1 do
 	for x = 0, maxX, 1 do
 		if ((checked[x] == nil) or not checked[x][y]) then
-			wpm:addFlag(x, y, pathingTypes.FLAG_WALK + pathingTypes.FLAG_UNKNOWN3)
+			wpm:addFlag(x, y, wc3wpm.pathingTypes.FLAG_WALK + wc3wpm.pathingTypes.FLAG_UNKNOWN3)
 
 			c = c + 1
 		end
@@ -169,7 +169,7 @@ createDir(outputDir)
 
 wpm:writeToFile(outputDir..[[war3map.wpm]])
 
-local impPort = createMpqPort()
+local impPort = portLib.createMpqPort()
 
 impPort:addImport(outputDir..[[war3map.wpm]], [[war3map.wpm]])
 

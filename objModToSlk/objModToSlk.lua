@@ -44,7 +44,7 @@ local classicMpqPath = wc3path..'war3.mpq'
 
 local mpqPaths = {mapPath, patchMpqPath, tftMpqPath, classicMpqPath}
 
-local commonExtPort = createMpqPort()
+local commonExtPort = portLib.createMpqPort()
 
 local slkPaths = {
 	[[Units\UnitAbilities.slk]],
@@ -73,7 +73,7 @@ commonExtPort:addExtract(profilePath, inputDir)
 
 commonExtPort:commit(mpqPaths)
 
-local mapExtPort = createMpqPort()
+local mapExtPort = portLib.createMpqPort()
 
 local exts = {'w3u', 'w3t', 'w3b', 'w3d', 'w3a', 'w3h', 'w3q'}
 
@@ -93,7 +93,7 @@ local outputDir = io.local_dir()..[[Output\]]
 
 objContainer:output(outputDir)
 
-local impPort = createMpqPort()
+local impPort = portLib.createMpqPort()
 
 for _, ext in pairs(exts) do
 	impPort:addDelete([[war3map.]]..ext)

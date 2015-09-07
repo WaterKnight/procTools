@@ -189,7 +189,7 @@ end
 
 out:writeToPath(io.local_dir()..'out.j')
 
-mpqExtract(mapPath, 'war3map.j', io.local_dir())
+portLib.mpqExtract(mapPath, 'war3map.j', io.local_dir())
 
 local j = createJass()
 
@@ -199,4 +199,4 @@ out:merge(j)
 
 out:writeToPath(io.local_dir()..'war3map.j')
 
-mpqImport(mapPath, io.local_dir()..'war3map.j', 'war3map.j')
+portLib.mpqImport(mapPath, io.local_dir()..'war3map.j', 'war3map.j')
