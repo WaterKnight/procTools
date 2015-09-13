@@ -27,21 +27,20 @@ createDir(inputDir)
 portLib.mpqExtract(map, [[war3map.w3i]], inputDir)
 portLib.mpqExtract(map, [[war3map.wts]], inputDir)
 
-flushDir(outputDir)
-createDir(outputDir)
+require 'wc3info'
 
-require 'wc3binaryFile'
-require 'wc3binaryMaskFuncs'
-require 'wtsParser'
+local info = wc3info.create()
 
-local root = wc3binaryFile.create()
+info:readFromFile(inputDir..[[war3map.w3i]])
 
-root:readFromFile(inputDir..[[war3map.w3i]], infoFileMaskFunc)
+require 'wc3wts'
 
-local wtsTable = wtsParser.parse(inputDir..[[war3map.wts]])
+local wts = wc3wts.create()
 
-local mapName = wtsParser.translateString(wtsTable, root:getVal('mapName'))
-local buildNum = root:getVal('savesAmount')
+wts:readFromFile(inputDir..[[war3map.wts]])
+
+local mapName = wts:translate(info.mapName)
+local buildNum = info.savesAmount
 
 if (newName == nil) then
 	newName = mapName..' Build '..buildNum
@@ -50,19 +49,13 @@ else
 	newName = newName:gsub('%%buildNum%%', buildNum)
 end
 
-root:setVal('mapName', newName)
+flushDir(outputDir)
 
-root:writeToFile(outputDir..[[war3map.w3i]], infoFileMaskFunc)
+createDir(outputDir)
 
---require 'wc3info'
+info:setMapName(newName)
 
---local info = wc3info.create()
-
---info:readFromFile(inputDir..[[war3map.w3i]])
-
---info:setName(info:getName()..' Build '..info:getSavesAmount())
-
---info:writeToFile(outputDir..[[war3map.w3i]])
+info:writeToFile(outputDir..[[war3map.w3i]], infoFileMaskFunc)
 
 local impPort = portLib.createMpqPort()
 

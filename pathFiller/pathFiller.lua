@@ -33,29 +33,36 @@ end
 rectFile:close()
 
 require 'wc3binaryFile'
-require 'wc3binaryMaskFuncs'
 
-local root = wc3binaryFile.create()
+require 'wc3env'
 
-root:readFromFile(inputDir..[[war3map.w3e]], envMaskFuncOnlyHeader)
+local terrain = wc3env.create()
 
-local centerX = root:getVal('centerX')
-local centerY = root:getVal('centerY')
+terrain:readFromFile(inputDir..[[war3map.w3e]], true)
 
-local root = wc3binaryFile.create()
+require 'wc3rect'
 
-root:readFromFile(inputDir..[[war3map.w3r]], rectMaskFunc)
+local rectFile = wc3rect.create()
+
+rectFile:readFromFile(inputDir..[[war3map.w3r]])
+
+require 'wc3wpm'
+
+local wpm = wc3wpm.create()
+
+wpm:readFromFile(inputDir..[[war3map.wpm]])
+
+wpm:setBaseTerrain(terrain)
 
 local sourcePts = {}
 
-for i = 1, root:getVal('rectsCount'), 1 do
-	local rect = root:getSub('rect'..i)
+for i = 1, #rectFile.rects, 1 do
+	local rect = rectFile.rects[i]
 
-	local name = rect:getVal('name')
+	local name = rect.name
 
 	if ((name:sub(1, 4) == 'wpm_') or (name:sub(1, 4) == 'wpm ')) then
-		local x = math.floor(((rect:getVal('minX') + rect:getVal('maxX')) / 2 - centerX) / 32)
-		local y = math.floor(((rect:getVal('minY') + rect:getVal('maxY')) / 2 - centerY) / 32)
+		local x, y  = wpm:getFromCoords(rect.centerX, rect.centerY)
 
 		local newPt = {}
 
@@ -65,12 +72,6 @@ for i = 1, root:getVal('rectsCount'), 1 do
 		sourcePts[#sourcePts + 1] = newPt		
 	end
 end
-
-require 'wc3wpm'
-
-local wpm = wc3wpm.create()
-
-wpm:readFromFile(inputDir..[[war3map.wpm]])
 
 local maxX = wpm.width - 1
 local maxY = wpm.height - 1
@@ -104,7 +105,7 @@ local function fill(x, y)
 			return
 		end
 
-		if wpm:isFlag(x, y, pathingTypes.FLAG_WALK) then
+		if wpm:isFlag(x, y, wc3wpm.pathingTypes.FLAG_WALK) then
 			return
 		end
 
