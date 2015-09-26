@@ -11,10 +11,9 @@ assert(scriptPath, 'no scriptPath')
 local inputDir = io.local_dir()..[[Input\]]
 local outputDir = io.local_dir()..[[Output\]]
 
-removeDir(inputDir)
-removeDir(outputDir)
+io.removeDir(inputDir)
 
-createDir(inputDir)
+io.createDir(inputDir)
 
 require 'portLib'
 
@@ -22,7 +21,7 @@ portLib.mpqExtract(mapPath, [[war3map.doo]], inputDir)
 
 require 'wc3doo'
 
-local doo = createDoo()
+local doo = wc3doo.create()
 
 doo:readFromPath(inputDir..[[war3map.doo]])
 
@@ -34,7 +33,9 @@ _G['doo'] = doo
 
 loadfile(scriptPath)()
 
-createDir(outputDir)
+io.removeDir(outputDir)
+
+io.createDir(outputDir)
 
 doo:writeToPath(outputDir..[[war3map.doo]])
 

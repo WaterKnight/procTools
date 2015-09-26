@@ -11,14 +11,11 @@ mapPath = io.toAbsPath(mapPath)
 local inputDir = io.local_dir()..[[Input\]]
 local outputDir = io.local_dir()..[[Output\]]
 
-removeDir(inputDir)
-removeDir(outputDir)
-
 require 'portLib'
 
-flushDir(inputDir)
+io.removeDir(inputDir)
 
-createDir(inputDir)
+io.createDir(inputDir)
 
 portLib.mpqExtract(mapPath, [[war3map.wpm]], inputDir)
 portLib.mpqExtract(mapPath, [[war3map.w3r]], inputDir)
@@ -164,9 +161,9 @@ end
 
 print(string.format('%i cells changed within %s seconds', c, math.cutFloat(t:getElapsed())))
 
-flushDir(outputDir)
+io.removeDir(outputDir)
 
-createDir(outputDir)
+io.createDir(outputDir)
 
 wpm:writeToFile(outputDir..[[war3map.wpm]])
 

@@ -11,10 +11,9 @@ assert(scriptPath, 'no scriptPath')
 local inputDir = io.local_dir()..[[Input\]]
 local outputDir = io.local_dir()..[[Output\]]
 
-removeDir(inputDir)
-removeDir(outputDir)
+io.removeDir(inputDir)
 
-createDir(inputDir)
+io.createDir(inputDir)
 
 require 'portLib'
 
@@ -77,7 +76,9 @@ _G['setXY'] = setXY
 
 loadfile(scriptPath)()
 
-createDir(outputDir)
+io.removeDir(outputDir)
+
+io.createDir(outputDir)
 
 shd:writeToPath(outputDir..[[war3map.shd]])
 

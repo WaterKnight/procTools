@@ -14,9 +14,9 @@ osLib.clearScreen()
 
 local inputDir = io.local_dir()..[[Input\]]
 
-removeDir(inputDir)
+io.removeDir(inputDir)
 
-createDir(inputDir)
+io.createDir(inputDir)
 
 require 'wc3objMerge'
 
@@ -110,9 +110,9 @@ end
 
 local outputDir = io.local_dir()..[[Output\]]
 
-removeDir(outputDir)
+io.removeDir(outputDir)
 
-createDir(outputDir)
+io.createDir(outputDir)
 
 for path, objMod in pairs(objMods) do
 	objMod:writeToFile(outputDir..path)

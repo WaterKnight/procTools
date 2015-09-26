@@ -12,4 +12,4 @@ assert(otherPath, 'no otherPath')
 	copyFile(path, sourcePath)
 end]]
 
-copyDir(otherPath, sourcePath)
+io.copyDir(otherPath, sourcePath)

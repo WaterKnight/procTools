@@ -1,3 +1,0 @@
-lua test.lua
-
-pause

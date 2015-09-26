@@ -19,8 +19,9 @@ require 'portLib'
 
 local inputDir = io.local_dir()..[[Input\]]
 
-removeDir(inputDir)
-createDir(inputDir)
+io.removeDir(inputDir)
+
+io.createDir(inputDir)
 
 portLib.mpqExtract(mapPath, 'war3map.j', inputDir..'war3map.j')
 
@@ -312,6 +313,8 @@ local t = {
 if doTracebacks then
 	mergeTable(t, {		
 		DebugEx = 'gg__debugEx',
+
+		Preloader = 'gg__Preloader',
 
 		TriggerEvaluate = 'gg__TriggerEvaluate',
 		TriggerExecute = 'gg__TriggerExecute',
@@ -764,7 +767,7 @@ local function replaceCalls(func, call)
 
 		local name, pos, posEnd = line:readIdentifier()
 
-		while name do
+		while (name ~= nil) do
 			if (name == call) then
 				local functionWord, pos2, pos2End = line:reverseReadIdentifier(pos - 1)
 
@@ -879,12 +882,14 @@ local function regFunc(func, localTable, level)
 		local req = func.reqs[i]
 --print('\treq: '..req)
 		if (jass:getFuncByName(req) ~= nil) then
-			if localTable[req] then
+			if (localTable[req] ~= nil) then
 				outFuncsWrite(indent..'cycle between '..func.name..' and '..req)
 				outCyclesWrite(indent..func.name..' and '..req)
 				outCyclesWrite(indent..'eval from '..func.name..' to '..req)
 	
 				replaceCalls(func, req)
+			--elseif (req.isEvalFunc) then
+				--replaceCalls(func, req)
 			else
 				regFunc(jass:getFuncByName(req), copyTable(localTable), level + 1)
 			end
@@ -920,6 +925,8 @@ autoRunsFunc.notListedInFuncsTableInit = true
 autoExecsInitFunc.notListedInFuncsTableInit = true
 
 autoRunsFunc:addReq(runProtFunc.name)
+
+--jass:getFuncByName('gg__debugMsg'):setAsEvalFunc()
 
 for _, func in pairs(autoRuns) do
 	runProtFunc:addReq(func.name)
@@ -1077,8 +1084,9 @@ outError:close()
 
 local outputDir = io.local_dir()..[[Output\]]
 
-removeDir(outputDir)
-createDir(outputDir)
+io.removeDir(outputDir)
+
+io.createDir(outputDir)
 
 jass:writeToPath(outputDir..'war3map.j')
 createJass():writeToPath(outputDir..'blizzard.j')

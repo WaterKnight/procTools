@@ -9,6 +9,8 @@ globals
     boolean gg__LOG_ON = true
     integer gg__LINES_COUNT = 0
     integer gg__LINES_MAX_PER_FILE = 500
+    integer gg__CUR_PRELOADED_LINES_COUNT = -1
+    string array gg__CUR_PRELOADED_LINES
     timer gg__GAMETIME_TIMER = CreateTimer()
     integer gg__SESSION_ID = -1
 
@@ -138,6 +140,7 @@ function gg__outputLine takes string s returns nothing
 
     if ((gg__LINES_COUNT / gg__LINES_MAX_PER_FILE) != ((gg__LINES_COUNT - 1) / gg__LINES_MAX_PER_FILE)) then
         call PreloadGenClear()
+        set gg__CUR_PRELOADED_LINES_COUNT = 0
     endif
 
     set s = "#" + I2S(gg__LINES_COUNT) + " (" + R2S(gg__GetDebugTime()) + "): " + s
@@ -156,16 +159,38 @@ function gg__outputLine takes string s returns nothing
             exitwhen (i > c)
 
             if (i == c) then
-                call Preload("\")" + SubString(s, (i - 1) * 257, length))
+                set s2 = "\")" + SubString(s, (i - 1) * 257, length)
+
+                set gg__CUR_PRELOADED_LINES_COUNT = gg__CUR_PRELOADED_LINES_COUNT + 1
+                set gg__CUR_PRELOADED_LINES[gg__CUR_PRELOADED_LINES_COUNT] = s2
+                //call Preload(s2)
             else
-                call Preload("\")" + SubString(s, (i - 1) * 257, i * 257 + 1))
+		set s2 = "\")" + SubString(s, (i - 1) * 257, i * 257 + 1)
+
+                set gg__CUR_PRELOADED_LINES_COUNT = gg__CUR_PRELOADED_LINES_COUNT + 1
+                set gg__CUR_PRELOADED_LINES[gg__CUR_PRELOADED_LINES_COUNT] = s2
+                //call Preload(s2)
             endif
 
             set i = i + 1
         endloop
     else
-        call Preload(s2)
+        set gg__CUR_PRELOADED_LINES_COUNT = gg__CUR_PRELOADED_LINES_COUNT + 1
+        set gg__CUR_PRELOADED_LINES[gg__CUR_PRELOADED_LINES_COUNT] = s2
+        //call Preload(s2)
     endif
+
+    call PreloadGenClear()
+
+    set i = 0
+
+    loop
+        exitwhen (i > gg__CUR_PRELOADED_LINES_COUNT)
+
+        call Preload(gg__CUR_PRELOADED_LINES[i])
+
+        set i = i + 1
+    endloop
 
     call PreloadGenEnd(gg__LOG_SESSION_DIR + I2S(gg__SESSION_ID) + "\\log_" + I2S(gg__LINES_COUNT / gg__LINES_MAX_PER_FILE) + ".txt")
 
@@ -1135,4 +1160,8 @@ function gg__Player takes integer number returns player
 	endif
 
 	return Player(number)
+endfunction
+
+function gg__Preloader takes string s returns nothing
+	call Preloader(s)
 endfunction

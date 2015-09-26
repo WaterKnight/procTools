@@ -12,17 +12,13 @@ map = io.toAbsPath(map)
 local inputDir = io.local_dir()..[[Input\]]
 local outputDir = io.local_dir()..[[Output\]]
 
-removeDir(inputDir)
-removeDir(outputDir)
-
 assert(map, 'no map')
-
-osLib.clearScreen()
 
 require 'portLib'
 
-flushDir(inputDir)
-createDir(inputDir)
+io.removeDir(inputDir)
+
+io.createDir(inputDir)
 
 portLib.mpqExtract(map, [[war3map.w3i]], inputDir)
 portLib.mpqExtract(map, [[war3map.wts]], inputDir)
@@ -49,9 +45,9 @@ else
 	newName = newName:gsub('%%buildNum%%', buildNum)
 end
 
-flushDir(outputDir)
+io.removeDir(outputDir)
 
-createDir(outputDir)
+io.createDir(outputDir)
 
 info:setMapName(newName)
 

@@ -11,8 +11,6 @@ assert(wc3path, 'no wc3path')
 
 wc3path = io.toFolderPath(wc3path)
 
-osLib.clearScreen()
-
 require 'wc3objMerge'
 
 local objCon = objLib.createInstance()
@@ -116,7 +114,7 @@ end
 
 require 'wc3jass'
 
-local out = createJass()
+local out = wc3jass.create()
 
 if (scriptPath == nil) then
 	scriptPath = io.local_dir()..'stdScript.lua'
