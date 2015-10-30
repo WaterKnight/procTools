@@ -30,8 +30,8 @@ end
 local inputDir = io.local_dir()..[[Input\]]
 local outputDir = io.local_dir()..[[Output\]]
 
-removeDir(inputDir)
-removeDir(outputDir)
+io.removeDir(inputDir)
+io.removeDir(outputDir)
 
 assert(map, 'no map')
 
@@ -39,13 +39,13 @@ osLib.clearScreen()
 
 require 'portLib'
 
-flushDir(inputDir)
-createDir(inputDir)
+io.flushDir(inputDir)
+io.createDir(inputDir)
 
 portLib.mpqExtract(map, [[war3map.j]], inputDir)
 
-flushDir(outputDir)
-createDir(outputDir)
+io.flushDir(outputDir)
+io.createDir(outputDir)
 
 local fIn = io.open(inputDir..[[war3map.j]], 'r')
 local fOut = io.open(outputDir..[[war3map.j]], 'w+')

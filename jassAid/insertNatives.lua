@@ -10,9 +10,9 @@ require 'waterlua'
 
 require 'wc3jass'
 
-local script = createJass()
+local script = wc3jass.create()
 
-script:readFromPath(scriptPath)
+script:readFromFile(scriptPath)
 
 local debugFunc = script:createFunc('DebugMsg')
 
@@ -29,5 +29,5 @@ local debugExFunc = script:createFunc('DebugEx')
 debugExFunc:setNative(true)
 debugExFunc:addParam('s', 'string')
 
-script:writeToPath(outputPath)
+script:writeToFile(outputPath)
 

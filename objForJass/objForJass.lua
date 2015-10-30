@@ -13,7 +13,7 @@ wc3path = io.toFolderPath(wc3path)
 
 require 'wc3objMerge'
 
-local objCon = objLib.createInstance()
+local objCon = wc3objMerge.createMap()
 
 objCon:readFromMap(mapPath, true, wc3path)
 
@@ -185,16 +185,16 @@ if (scriptPath ~= nil) then
 	doScript2()
 end
 
-out:writeToPath(io.local_dir()..'out.j')
+out:writeToFile(io.local_dir()..'out.j')
 
 portLib.mpqExtract(mapPath, 'war3map.j', io.local_dir())
 
-local j = createJass()
+local j = wc3jass.create()
 
-j:readFromPath(io.local_dir()..'war3map.j')
+j:readFromFile(io.local_dir()..'war3map.j')
 
 out:merge(j)
 
-out:writeToPath(io.local_dir()..'war3map.j')
+out:writeToFile(io.local_dir()..'war3map.j')
 
 portLib.mpqImport(mapPath, io.local_dir()..'war3map.j', 'war3map.j')

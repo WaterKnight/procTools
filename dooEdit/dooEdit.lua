@@ -23,9 +23,9 @@ require 'wc3doo'
 
 local doo = wc3doo.create()
 
-doo:readFromPath(inputDir..[[war3map.doo]])
+doo:readFromFile(inputDir..[[war3map.doo]])
 
-local success, errorMsg = syntaxCheck(scriptPath)
+local success, errorMsg = io.syntaxCheck(scriptPath)
 
 assert(success, errorMsg)
 
@@ -37,6 +37,6 @@ io.removeDir(outputDir)
 
 io.createDir(outputDir)
 
-doo:writeToPath(outputDir..[[war3map.doo]])
+doo:writeToFile(outputDir..[[war3map.doo]])
 
 portLib.mpqImport(mapPath, outputDir..[[war3map.doo]], [[war3map.doo]])

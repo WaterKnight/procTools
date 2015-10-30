@@ -34,14 +34,14 @@ if (commonJPath == nil) then
 else
 	commonJPath = io.toAbsPath(commonJPath, io.curDir())
 
-	copyFile(commonJPath, inputDir..[[Scripts\common.j]])
+	io.copyFile(commonJPath, inputDir..[[Scripts\common.j]])
 
 	commonJPath = inputDir..[[Scripts\common.j]]
 end
 
-local natives = getJassNatives(commonJPath)
+local natives = wc3jass.getNatives(commonJPath)
 
-local blizzardJass = createJass()
+local blizzardJass = wc3jass.create()
 
 if (blizzardJPath == nil) then
 	blizzardJPath = inputDir..[[Scripts\blizzard.j]]
@@ -50,30 +50,30 @@ if (blizzardJPath == nil) then
 else
 	blizzardJPath = io.toAbsPath(blizzardJPath, io.curDir())
 
-	copyFile(blizzardJPath, inputDir..[[Scripts\blizzard.j]])
+	io.copyFile(blizzardJPath, inputDir..[[Scripts\blizzard.j]])
 
 	blizzardJPath = inputDir..[[Scripts\blizzard.j]]
 end
 
-blizzardJass:readFromPath(blizzardJPath)
+blizzardJass:readFromFile(blizzardJPath)
 
-local jass = createJass()
+local jass = wc3jass.create()
 
---jassSyntaxCheck({commonJPath, blizzardJPath, inputDir..'war3map.j'}, true)
+--wc3jass.syntaxCheck({commonJPath, blizzardJPath, inputDir..'war3map.j'}, true)
 
-jass:readFromPath(inputDir..'war3map.j')
+jass:readFromFile(inputDir..'war3map.j')
 
-local debugJass = createJass()
+local debugJass = wc3jass.create()
 
-jassSyntaxCheck({commonJPath, blizzardJPath, io.local_dir()..'debug.j'}, true)
+wc3jass.syntaxCheck({commonJPath, blizzardJPath, io.local_dir()..'debug.j'}, true)
 
-debugJass:readFromPath(io.local_dir()..'debug.j')
+debugJass:readFromFile(io.local_dir()..'debug.j')
 
-local wrapperJass = createJass()
+local wrapperJass = wc3jass.create()
 
-jassSyntaxCheck({commonJPath, blizzardJPath, io.local_dir()..'wrapperFuncs.j'}, true)
+wc3jass.syntaxCheck({commonJPath, blizzardJPath, io.local_dir()..'wrapperFuncs.j'}, true)
 
-wrapperJass:readFromPath(io.local_dir()..'wrapperFuncs.j')
+wrapperJass:readFromFile(io.local_dir()..'wrapperFuncs.j')
 
 debugJass:merge(wrapperJass)
 
@@ -311,7 +311,7 @@ local t = {
 }
 
 if doTracebacks then
-	mergeTable(t, {		
+	table.merge(t, {		
 		DebugEx = 'gg__debugEx',
 
 		Preloader = 'gg__Preloader',
@@ -1088,10 +1088,10 @@ io.removeDir(outputDir)
 
 io.createDir(outputDir)
 
-jass:writeToPath(outputDir..'war3map.j')
-createJass():writeToPath(outputDir..'blizzard.j')
+jass:writeToFile(outputDir..'war3map.j')
+wc3jass.create():writeToFile(outputDir..'blizzard.j')
 
-jassSyntaxCheck({commonJPath, outputDir..'war3map.j'}, true)
+wc3jass.syntaxCheck({commonJPath, outputDir..'war3map.j'}, true)
 
 portLib.mpqImport(mapPath, outputDir..'war3map.j', 'war3map.j')
 portLib.mpqImport(mapPath, outputDir..[[blizzard.j]], [[Scripts\blizzard.j]])

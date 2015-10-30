@@ -24,28 +24,28 @@ portLib.mpqExtract(mapPath, [[war3map.w3e]], inputDir)
 
 require 'wc3shd'
 
-local shd = createShd()
+local shd = wc3shd.create()
 
-shd:readFromPath(inputDir..[[war3map.doo]])
+shd:readFromFile(inputDir..[[war3map.doo]])
 
-require 'wc3terrain'
+require 'wc3env'
 
-local w3e = createW3e()
+local w3e = wc3env.create()
 
-w3e:readFromPath(inputDir..[[war3map.w3e]], true)
+w3e:readFromFile(inputDir..[[war3map.w3e]], true)
 
 shd:setDimensions((w3e.width - 1) * 4, (w3e.height - 1) * 4)
 
 require 'wc3doo'
 require 'wc3dooUnits'
 
-local doo = createDoo()
-local dooUnits = createDooUnits()
+local doo = wc3doo.create()
+local dooUnits = wc3dooUnits.create()
 
-doo:readFromPath(inputDir..[[war3map.doo]])
-dooUnits:readFromPath(inputDir..[[war3mapUnits.doo]])
+doo:readFromFile(inputDir..[[war3map.doo]])
+dooUnits:readFromFile(inputDir..[[war3mapUnits.doo]])
 
-local success, errorMsg = syntaxCheck(scriptPath)
+local success, errorMsg = io.syntaxCheck(scriptPath)
 
 assert(success, errorMsg)
 
@@ -80,6 +80,6 @@ io.removeDir(outputDir)
 
 io.createDir(outputDir)
 
-shd:writeToPath(outputDir..[[war3map.shd]])
+shd:writeToFile(outputDir..[[war3map.shd]])
 
 portLib.mpqImport(mapPath, outputDir..[[war3map.shd]], [[war3map.shd]])

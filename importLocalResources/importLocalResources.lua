@@ -16,7 +16,7 @@ local modelPaths = {}
 
 require 'wc3objMerge'
 
-local objCon = objLib.createInstance()
+local objCon = wc3objMerge.createMap()
 
 objCon:readFromMap(mapPath, false)
 
@@ -73,16 +73,18 @@ for _, func in pairs(j.funcs) do
 	end
 end
 
-require 'wtsParser'
+require 'wc3wts'
 
-local parseTable = wtsParser.parse('war3map.wts')
+local wts = wc3wts.create()
 
-local t = copyTable(modelPaths)
+wts:readFromFile('war3map.wts')
+
+local t = table.copy(modelPaths)
 
 for path in pairs(t) do
 	modelPaths[path] = nil
 
-	path = wtsParser.translateString(parseTable, path)
+	path = wts:translate(path)
 
 	if path:match([[^Local\]]) then
 		modelPaths[path] = path
@@ -98,14 +100,14 @@ for _, path in pairs(modelPaths) do
 		print('import', diskPath, 'to', path)
 		require 'mdxLib'
 
-		local mdx = createMdx()
+		local mdx = mdxLib.create()
 
-		mdx:readFromPath(diskPath)
+		mdx:readFromFile(diskPath)
 
 		for _, tex in pairs(mdx.texs) do
 			if tex.hasPath then
-				local texDiskPath = io.toAbsPath(tex.path, io.toAbsPath(getFolder(path), lookupPath))
-				local texTargetPath = getFolder(path)..tex.path
+				local texDiskPath = io.toAbsPath(tex.path, io.toAbsPath(io.getFolder(path), lookupPath))
+				local texTargetPath = io.getFolder(path)..tex.path
 
 				print('\tadd skin:', texDiskPath, 'to', texTargetPath)
 				impPort:addImport(texDiskPath, texTargetPath)

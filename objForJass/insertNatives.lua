@@ -10,9 +10,9 @@ require 'waterlua'
 
 require 'wc3jass'
 
-local script = createJass()
+local script = wc3jass.create()
 
-script:readFromPath(scriptPath)
+script:readFromFile(scriptPath)
 
 local function createType(name, jassType)
 	local func = script:createFunc(string.format('objForJass_read%s', name))
@@ -42,5 +42,5 @@ local func = script:createFunc(string.format('objForJass_init_autoRun', name))
 
 func:setNative(true)
 
-script:writeToPath(outputPath)
+script:writeToFile(outputPath)
 
